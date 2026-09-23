@@ -248,7 +248,7 @@
   </div>
   <div class="header-right">
     <div>Снимок на</div>
-    <div class="date">22.09.2026</div>
+    <div class="date">23.09.2026</div>
   </div>
 </div>
 
@@ -293,7 +293,7 @@
 </div>
 
 <div class="footer">
-  <div><b>Методология.</b> «Сегодня» — 22.09.2026. Для каждой сделки в статусе «в работе» (по каждому из 4 пайплайнов) берётся минимальный (ближайший) срок среди её незавершённых дел, затем сделка попадает в одну из 6 корзин — как в разделе Bitrix «Дела»: <b>Просрочены</b> (срок раньше сегодня), <b>На сегодня</b>, <b>На этой неделе</b> (пн–вс текущей недели), <b>На следующей неделе</b> (пн–вс следующей недели), <b>Позже</b> (дальше следующей недели), <b>Без дел</b> (нет ни одного незавершённого дела).</div>
+  <div><b>Методология.</b> «Сегодня» — 23.09.2026. Для каждой сделки в статусе «в работе» (по каждому из 4 пайплайнов) берётся минимальный (ближайший) срок среди её незавершённых дел, затем сделка попадает в одну из 6 корзин — как в разделе Bitrix «Дела»: <b>Просрочены</b> (срок раньше сегодня), <b>На сегодня</b>, <b>На этой неделе</b> (пн–вс текущей недели), <b>На следующей неделе</b> (пн–вс следующей недели), <b>Позже</b> (дальше следующей недели), <b>Без дел</b> (нет ни одного незавершённого дела).</div>
   <div style="margin-top:6px;">Все данные получены напрямую через REST API вебхука Bitrix24 (nkb.bitrix24.kz) — без ручной навигации по интерфейсу CRM: списки сделок по фильтрам команда+пайплайн (crm.deal.list) и список незавершённых дел по сделкам (crm.activity.list).</div>
 </div>
 
@@ -314,32 +314,32 @@
 
   var DATA = {
     spec: {
-      "Уральск":{overdue:0,today:54,week:142,nextWeek:42,later:13,none:0},
-      "Костанай":{overdue:10,today:8,week:7,nextWeek:1,later:0,none:15},
-      "Актобе":{overdue:0,today:48,week:41,nextWeek:37,later:10,none:4},
-      "Команда А":{overdue:0,today:61,week:34,nextWeek:7,later:5,none:0},
-      "Команда В":{overdue:5,today:30,week:68,nextWeek:21,later:21,none:2}
+      "Уральск":{overdue:2,today:32,week:123,nextWeek:63,later:18,none:1},
+      "Костанай":{overdue:12,today:1,week:10,nextWeek:5,later:1,none:17},
+      "Актобе":{overdue:0,today:22,week:45,nextWeek:46,later:15,none:4},
+      "Команда А":{overdue:1,today:53,week:39,nextWeek:12,later:6,none:0},
+      "Команда В":{overdue:0,today:30,week:60,nextWeek:35,later:21,none:2}
     },
     repeat: {
-      "Уральск":{overdue:0,today:6,week:19,nextWeek:26,later:20,none:0},
-      "Костанай":{overdue:0,today:0,week:2,nextWeek:0,later:0,none:6},
-      "Актобе":{overdue:0,today:18,week:35,nextWeek:23,later:56,none:1},
-      "Команда А":{overdue:0,today:23,week:42,nextWeek:13,later:44,none:0},
-      "Команда В":{overdue:1,today:8,week:17,nextWeek:20,later:41,none:1}
+      "Уральск":{overdue:0,today:5,week:11,nextWeek:34,later:22,none:0},
+      "Костанай":{overdue:0,today:2,week:0,nextWeek:0,later:0,none:6},
+      "Актобе":{overdue:0,today:6,week:27,nextWeek:31,later:68,none:1},
+      "Команда А":{overdue:0,today:33,week:18,nextWeek:22,later:49,none:3},
+      "Команда В":{overdue:2,today:4,week:16,nextWeek:25,later:39,none:1}
     },
     contract: {
-      "Уральск":{overdue:0,today:5,week:7,nextWeek:6,later:1,none:0},
+      "Уральск":{overdue:0,today:2,week:10,nextWeek:7,later:2,none:0},
       "Костанай":{overdue:1,today:0,week:0,nextWeek:0,later:0,none:0},
-      "Актобе":{overdue:0,today:4,week:8,nextWeek:2,later:1,none:0},
-      "Команда А":{overdue:0,today:28,week:12,nextWeek:11,later:11,none:0},
-      "Команда В":{overdue:1,today:2,week:4,nextWeek:2,later:2,none:0}
+      "Актобе":{overdue:0,today:3,week:7,nextWeek:3,later:1,none:0},
+      "Команда А":{overdue:0,today:14,week:13,nextWeek:17,later:12,none:0},
+      "Команда В":{overdue:0,today:3,week:4,nextWeek:2,later:3,none:0}
     },
     contractRepeat: {
-      "Уральск":{overdue:0,today:3,week:2,nextWeek:0,later:1,none:0},
+      "Уральск":{overdue:0,today:3,week:1,nextWeek:1,later:1,none:0},
       "Костанай":{overdue:0,today:0,week:0,nextWeek:0,later:0,none:0},
       "Актобе":{overdue:0,today:0,week:1,nextWeek:5,later:7,none:0},
-      "Команда А":{overdue:0,today:0,week:1,nextWeek:0,later:2,none:0},
-      "Команда В":{overdue:0,today:1,week:5,nextWeek:6,later:15,none:0}
+      "Команда А":{overdue:0,today:0,week:0,nextWeek:0,later:3,none:0},
+      "Команда В":{overdue:0,today:0,week:7,nextWeek:7,later:15,none:0}
     }
   };
 
