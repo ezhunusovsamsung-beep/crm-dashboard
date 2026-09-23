@@ -1,0 +1,728 @@
+<title>Аудит команд CRM</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1E2429">
+
+<!-- PWA: manifest + иконки -->
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png" sizes="192x192" type="image/png">
+<link rel="icon" href="icon-512.png" sizes="512x512" type="image/png">
+
+<!-- iOS: чтобы «На экран «Домой»» открывался как приложение, без хрома Safari -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Аудит CRM">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600;700&display=swap">
+<style>
+  :root{
+    --bg:#F6F4EE;
+    --surface:#FFFFFF;
+    --surface-2:#ECE7DB;
+    --ink:#1E2429;
+    --ink-2:#57616A;
+    --ink-3:#8B939B;
+    --border:#DEDACC;
+    --accent:#2B5F82;
+    --accent-soft:#E4EEF3;
+    --good:#2E7D5B;
+    --good-soft:#E4F0E9;
+    --warning:#B8770D;
+    --warning-soft:#F6E9D3;
+    --critical:#AA3A2E;
+    --critical-soft:#F5E1DD;
+    --neutral2:#5C6470;
+    --neutral2-soft:#E7E5DF;
+    --pipe-1:#2B5F82;
+    --pipe-2:#3E8E74;
+    --pipe-3:#B8770D;
+    --pipe-4:#7A5CA6;
+    --chart-label-on-fill:#FFFFFF;
+    --shadow: 0 1px 2px rgba(30,36,41,0.06), 0 4px 14px rgba(30,36,41,0.05);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#14181C;
+      --surface:#1B2126;
+      --surface-2:#232A31;
+      --ink:#EDEFF1;
+      --ink-2:#B4BBC2;
+      --ink-3:#7C8590;
+      --border:#2E3640;
+      --accent:#7CB2D6;
+      --accent-soft:#213641;
+      --good:#5FBB93;
+      --good-soft:#1E332B;
+      --warning:#E3A73F;
+      --warning-soft:#3A2E19;
+      --critical:#E37C6E;
+      --critical-soft:#3A2420;
+      --neutral2:#AEB6C0;
+      --neutral2-soft:#2A3038;
+      --pipe-1:#7CB2D6;
+      --pipe-2:#6BC4A5;
+      --pipe-3:#E3A73F;
+      --pipe-4:#B39BDE;
+      --chart-label-on-fill:#14181C;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#14181C;
+    --surface:#1B2126;
+    --surface-2:#232A31;
+    --ink:#EDEFF1;
+    --ink-2:#B4BBC2;
+    --ink-3:#7C8590;
+    --border:#2E3640;
+    --accent:#7CB2D6;
+    --accent-soft:#213641;
+    --good:#5FBB93;
+    --good-soft:#1E332B;
+    --warning:#E3A73F;
+    --warning-soft:#3A2E19;
+    --critical:#E37C6E;
+    --critical-soft:#3A2420;
+    --neutral2:#AEB6C0;
+    --neutral2-soft:#2A3038;
+    --pipe-1:#7CB2D6;
+    --pipe-2:#6BC4A5;
+    --pipe-3:#E3A73F;
+    --pipe-4:#B39BDE;
+    --chart-label-on-fill:#14181C;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.35);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+    padding-inline:20px;
+    padding-block:28px 48px;
+    max-width:1180px;
+    margin:0 auto;
+  }
+  h1,h2,h3{font-family:'Archivo', ui-sans-serif, system-ui, sans-serif; margin:0; text-wrap:balance;}
+  .num{font-family:'IBM Plex Mono', ui-monospace, monospace; font-variant-numeric:tabular-nums;}
+
+  /* ---------- header ---------- */
+  .header{
+    display:flex; flex-wrap:wrap; gap:20px 40px; align-items:flex-end; justify-content:space-between;
+    padding-bottom:22px; border-bottom:2px solid var(--ink);
+    margin-bottom:28px;
+  }
+  .header-left .eyebrow{
+    font:600 12px/1.4 'IBM Plex Sans'; letter-spacing:.08em; text-transform:uppercase; color:var(--accent);
+    margin-bottom:6px;
+  }
+  .header-left h1{font-size:clamp(24px,4vw,34px); font-weight:800; color:var(--ink);}
+  .header-left p{margin:8px 0 0; color:var(--ink-2); font-size:14px; max-width:680px; line-height:1.5;}
+  .header-right{text-align:right; font-size:13px; color:var(--ink-2); line-height:1.6;}
+  .header-right .date{font:700 16px/1.2 'IBM Plex Mono'; color:var(--ink);}
+
+  /* ---------- KPI tiles ---------- */
+  .kpi-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; margin-bottom:36px;}
+  .kpi-card{
+    background:var(--surface); border:1px solid var(--border); border-radius:10px;
+    padding:18px 20px; box-shadow:var(--shadow);
+    display:flex; flex-direction:column; gap:12px;
+  }
+  .kpi-top{display:flex; align-items:flex-start; justify-content:space-between; gap:10px;}
+  .kpi-label{font-size:12.5px; font-weight:600; color:var(--ink-2); line-height:1.35; max-width:150px;}
+  .kpi-icon{width:26px; height:26px; border-radius:7px; display:flex; align-items:center; justify-content:center; flex:none;}
+  .kpi-value{font:700 34px/1 'IBM Plex Mono'; letter-spacing:-0.01em;}
+  .kpi-sub{font-size:11.5px; color:var(--ink-3);}
+  .mini-rows{display:flex; flex-direction:column; gap:5px; margin-top:2px;}
+  .mini-row{display:grid; grid-template-columns:64px 1fr 26px; align-items:center; gap:8px;}
+  .mini-label{font-size:10.5px; color:var(--ink-2); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .mini-track{height:6px; background:var(--surface-2); border-radius:4px; overflow:hidden;}
+  .mini-fill{display:block; height:100%; border-radius:4px;}
+  .mini-value{font-size:11px; text-align:right; color:var(--ink); font-family:'IBM Plex Mono';}
+
+  /* ---------- section headers ---------- */
+  .section{margin-bottom:40px;}
+  .section-head{margin-bottom:16px;}
+  .section-head h2{font-size:19px; font-weight:700;}
+  .section-head p{margin:6px 0 0; font-size:13px; color:var(--ink-2); max-width:680px; line-height:1.5;}
+
+  /* ---------- legend ---------- */
+  .legend{display:flex; flex-wrap:wrap; gap:14px 22px; margin-bottom:18px; padding:10px 14px; background:var(--surface); border:1px solid var(--border); border-radius:8px;}
+  .legend-item{display:flex; align-items:center; gap:7px; font-size:12px; color:var(--ink-2); font-weight:500;}
+  .legend-swatch{width:11px; height:11px; border-radius:3px; flex:none;}
+
+  /* ---------- charts ---------- */
+  .charts-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:18px;}
+  .chart-card{background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:16px 16px 8px; box-shadow:var(--shadow);}
+  .chart-card h3{font-size:14px; font-weight:700; margin-bottom:2px;}
+  .chart-card .chart-note{font-size:11.5px; color:var(--ink-3); margin-bottom:6px;}
+  .chart-card svg{width:100%; height:auto; display:block; overflow:visible;}
+  .axis-label{font:500 10px 'IBM Plex Mono'; fill:var(--ink-3);}
+  .bar-total{font:700 12px 'IBM Plex Mono'; fill:var(--ink);}
+  .seg-label{font:600 9.5px 'IBM Plex Mono'; fill:var(--chart-label-on-fill); text-anchor:middle; pointer-events:none;}
+  .seg{cursor:pointer; transition:opacity .12s ease;}
+  .seg:hover{opacity:.82;}
+  @media (prefers-reduced-motion: reduce){ .seg{transition:none;} }
+
+  /* ---------- tooltip ---------- */
+  #tooltip{
+    position:fixed; pointer-events:none; z-index:50; background:var(--ink); color:var(--bg);
+    font:600 11.5px 'IBM Plex Sans'; padding:6px 10px; border-radius:6px; box-shadow:var(--shadow);
+    opacity:0; transform:translate(-50%,-100%); transition:opacity .1s ease; white-space:nowrap;
+  }
+  #tooltip.show{opacity:1;}
+
+  /* ---------- callouts ---------- */
+  .callouts{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px;}
+  .callout{
+    display:flex; gap:12px; padding:14px 16px; border-radius:10px; border:1px solid var(--border);
+    background:var(--surface); box-shadow:var(--shadow);
+  }
+  .callout .icon{flex:none; width:28px; height:28px; border-radius:8px; display:flex; align-items:center; justify-content:center;}
+  .callout .icon.good{background:var(--good-soft); color:var(--good);}
+  .callout .icon.warning{background:var(--warning-soft); color:var(--warning);}
+  .callout .icon.critical{background:var(--critical-soft); color:var(--critical);}
+  .callout .icon.neutral{background:var(--accent-soft); color:var(--accent);}
+  .callout h4{font-size:13px; font-weight:700; margin:0 0 4px;}
+  .callout p{margin:0; font-size:12.5px; color:var(--ink-2); line-height:1.5;}
+
+  /* ---------- rank table ---------- */
+  #rankTable{min-width:920px;}
+  #rankTable th{font:600 10px 'IBM Plex Sans'; text-transform:uppercase; letter-spacing:.02em; color:var(--ink-2); padding:8px 10px; text-align:right; white-space:nowrap; border-bottom:2px solid var(--ink);}
+  #rankTable th.row-head{text-align:left;}
+  #rankTable td{padding:8px 10px; text-align:right; border-bottom:1px solid var(--border); font-family:'IBM Plex Mono'; font-variant-numeric:tabular-nums;}
+  #rankTable td.row-head{text-align:left; font-family:'IBM Plex Sans'; font-weight:600; color:var(--ink);}
+  #rankTable td.rank{color:var(--ink-3); font-weight:600; width:26px;}
+  #rankTable tbody tr:hover td{background:var(--surface-2);}
+  .rate-pill{display:inline-block; padding:2px 8px; border-radius:100px; font-weight:700; font-size:11.5px;}
+
+  /* ---------- horizontal rate bars ---------- */
+  .hbar-row{display:grid; grid-template-columns:88px 1fr 46px; align-items:center; gap:10px; margin-bottom:10px;}
+  .hbar-row:last-child{margin-bottom:0;}
+  .hbar-label{font-size:12px; font-weight:600; color:var(--ink); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .hbar-track{height:16px; background:var(--surface-2); border-radius:5px; overflow:hidden; position:relative;}
+  .hbar-fill{display:block; height:100%; border-radius:5px;}
+  .hbar-avg-line{position:absolute; top:-3px; bottom:-3px; width:2px; background:var(--ink-3);}
+  .hbar-value{font-family:'IBM Plex Mono'; font-size:12px; text-align:right; font-weight:700; color:var(--ink);}
+
+  /* ---------- table ---------- */
+  .table-wrap{overflow-x:auto; border:1px solid var(--border); border-radius:10px; background:var(--surface); box-shadow:var(--shadow);}
+  table{border-collapse:collapse; width:100%; min-width:1360px; font-size:11.5px;}
+  thead th{
+    font:600 10px 'IBM Plex Sans'; text-transform:uppercase; letter-spacing:.02em; color:var(--ink-2);
+    padding:7px 8px; text-align:right; white-space:nowrap; border-bottom:1px solid var(--border);
+  }
+  thead tr.group-row th{
+    padding-top:12px; padding-bottom:6px; font-size:10.5px; text-align:center; color:var(--ink);
+    border-top:3px solid var(--border);
+  }
+  thead tr.sub-row th{border-top:none;}
+  th.row-head, td.row-head{
+    position:sticky; left:0; background:var(--surface); text-align:left; z-index:2;
+    border-right:1px solid var(--border); font-weight:600; color:var(--ink);
+  }
+  tbody td{padding:6px 8px; text-align:right; border-bottom:1px solid var(--border); font-family:'IBM Plex Mono'; font-variant-numeric:tabular-nums;}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr.total-row td{background:var(--surface-2); font-weight:700; border-top:2px solid var(--border);}
+  tbody tr.total-row td.row-head{background:var(--surface-2);}
+  td.zero{color:var(--ink-3);}
+  .group-total th{background:var(--surface-2);}
+  td.group-total-cell{background:color-mix(in srgb, var(--surface-2) 55%, transparent);}
+
+  /* ---------- footer ---------- */
+  .footer{margin-top:44px; padding-top:18px; border-top:1px solid var(--border); font-size:11.5px; color:var(--ink-3); line-height:1.6;}
+  .footer b{color:var(--ink-2);}
+
+  @media (max-width:640px){
+    .header{align-items:flex-start;}
+    .header-right{text-align:left;}
+  }
+</style>
+
+<div class="header">
+  <div class="header-left">
+    <div class="eyebrow">NKB GROUP · Bitrix24 CRM</div>
+    <h1>Сравнение команд по сделкам</h1>
+    <p>Дела по сделкам в работе — просроченные, на сегодня, на этой / следующей неделе, позже, без дел — по 5 командам в разрезе 4 пайплайнов. Корзины воспроизводят раздел Bitrix «Дела».</p>
+  </div>
+  <div class="header-right">
+    <div>Снимок на</div>
+    <div class="date">22.09.2026</div>
+  </div>
+</div>
+
+<div class="kpi-grid" id="kpiGrid"></div>
+
+<div class="section">
+  <div class="section-head">
+    <h2>Наблюдения</h2>
+    <p>Ключевые отклонения, видимые в данных на дату снимка.</p>
+  </div>
+  <div class="callouts" id="callouts"></div>
+</div>
+
+<div class="section">
+  <div class="section-head">
+    <h2>Команды по пайплайнам</h2>
+    <p>Каждый столбец — сумма показателя по команде; сегменты — вклад каждого из 4 пайплайнов.</p>
+  </div>
+  <div class="legend" id="legend"></div>
+  <div class="charts-grid" id="chartsGrid"></div>
+</div>
+
+<div class="section">
+  <div class="section-head">
+    <h2>Сравнение команд — нормализованные показатели</h2>
+    <p>Абсолютные числа не сравнимы напрямую: команды отличаются числом менеджеров (2–9 человек) и размером портфеля (50–347 сделок). Здесь те же данные пересчитаны в доли и ставки.</p>
+  </div>
+  <div class="table-wrap" style="margin-bottom:18px;">
+    <table id="rankTable"></table>
+  </div>
+  <div class="charts-grid" id="rateChartsGrid"></div>
+</div>
+
+<div class="section">
+  <div class="section-head">
+    <h2>Полная детализация</h2>
+    <p>5 команд × 4 пайплайна × 6 корзин, плюс сводные итоги по команде и по всем командам.</p>
+  </div>
+  <div class="table-wrap">
+    <table id="dataTable"></table>
+  </div>
+</div>
+
+<div class="footer">
+  <div><b>Методология.</b> «Сегодня» — 22.09.2026. Для каждой сделки в статусе «в работе» (по каждому из 4 пайплайнов) берётся минимальный (ближайший) срок среди её незавершённых дел, затем сделка попадает в одну из 6 корзин — как в разделе Bitrix «Дела»: <b>Просрочены</b> (срок раньше сегодня), <b>На сегодня</b>, <b>На этой неделе</b> (пн–вс текущей недели), <b>На следующей неделе</b> (пн–вс следующей недели), <b>Позже</b> (дальше следующей недели), <b>Без дел</b> (нет ни одного незавершённого дела).</div>
+  <div style="margin-top:6px;">Все данные получены напрямую через REST API вебхука Bitrix24 (nkb.bitrix24.kz) — без ручной навигации по интерфейсу CRM: списки сделок по фильтрам команда+пайплайн (crm.deal.list) и список незавершённых дел по сделкам (crm.activity.list).</div>
+</div>
+
+<div id="tooltip"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  var TEAMS = ["Уральск","Костанай","Актобе","Команда А","Команда В"];
+
+  var PIPELINES = [
+    {key:"spec",           name:"СПЕЦТЕХНИКА",                       short:"СПЕЦ",     varName:"--pipe-1"},
+    {key:"repeat",         name:"ПОВТОРНАЯ СДЕЛКА",                  short:"ПОВТОРН.", varName:"--pipe-2"},
+    {key:"contract",       name:"КОНТРАКТНАЯ ТЕХНИКА",                short:"КОНТР.",   varName:"--pipe-3"},
+    {key:"contractRepeat", name:"КОНТРАКТНАЯ ТЕХНИКА (ПОВТОРНАЯ)",    short:"КОНТР.П.", varName:"--pipe-4"}
+  ];
+
+  var DATA = {
+    spec: {
+      "Уральск":{overdue:0,today:54,week:142,nextWeek:42,later:13,none:0},
+      "Костанай":{overdue:10,today:8,week:7,nextWeek:1,later:0,none:15},
+      "Актобе":{overdue:0,today:48,week:41,nextWeek:37,later:10,none:4},
+      "Команда А":{overdue:0,today:61,week:34,nextWeek:7,later:5,none:0},
+      "Команда В":{overdue:5,today:30,week:68,nextWeek:21,later:21,none:2}
+    },
+    repeat: {
+      "Уральск":{overdue:0,today:6,week:19,nextWeek:26,later:20,none:0},
+      "Костанай":{overdue:0,today:0,week:2,nextWeek:0,later:0,none:6},
+      "Актобе":{overdue:0,today:18,week:35,nextWeek:23,later:56,none:1},
+      "Команда А":{overdue:0,today:23,week:42,nextWeek:13,later:44,none:0},
+      "Команда В":{overdue:1,today:8,week:17,nextWeek:20,later:41,none:1}
+    },
+    contract: {
+      "Уральск":{overdue:0,today:5,week:7,nextWeek:6,later:1,none:0},
+      "Костанай":{overdue:1,today:0,week:0,nextWeek:0,later:0,none:0},
+      "Актобе":{overdue:0,today:4,week:8,nextWeek:2,later:1,none:0},
+      "Команда А":{overdue:0,today:28,week:12,nextWeek:11,later:11,none:0},
+      "Команда В":{overdue:1,today:2,week:4,nextWeek:2,later:2,none:0}
+    },
+    contractRepeat: {
+      "Уральск":{overdue:0,today:3,week:2,nextWeek:0,later:1,none:0},
+      "Костанай":{overdue:0,today:0,week:0,nextWeek:0,later:0,none:0},
+      "Актобе":{overdue:0,today:0,week:1,nextWeek:5,later:7,none:0},
+      "Команда А":{overdue:0,today:0,week:1,nextWeek:0,later:2,none:0},
+      "Команда В":{overdue:0,today:1,week:5,nextWeek:6,later:15,none:0}
+    }
+  };
+
+  var METRICS = [
+    {key:"overdue",  label:"Просрочены",          short:"Просроч.", colorVar:"--critical", softVar:"--critical-soft"},
+    {key:"today",    label:"На сегодня",           short:"Сегодня",  colorVar:"--accent",   softVar:"--accent-soft"},
+    {key:"week",     label:"На этой неделе",       short:"Тек.нед.", colorVar:"--good",     softVar:"--good-soft"},
+    {key:"nextWeek", label:"На следующей неделе",  short:"След.нед.",colorVar:"--warning",  softVar:"--warning-soft"},
+    {key:"later",    label:"Позже",                short:"Позже",    colorVar:"--neutral2", softVar:"--neutral2-soft"},
+    {key:"none",     label:"Без дел",              short:"Без дел",  colorVar:"--ink-3",    softVar:"--surface-2"}
+  ];
+
+  function teamTotal(team, metricKey){
+    return PIPELINES.reduce(function(sum,p){ return sum + DATA[p.key][team][metricKey]; }, 0);
+  }
+  function pipelineTotal(pKey, metricKey){
+    return TEAMS.reduce(function(sum,t){ return sum + DATA[pKey][t][metricKey]; }, 0);
+  }
+  function grandTotal(metricKey){
+    return PIPELINES.reduce(function(sum,p){ return sum + pipelineTotal(p.key, metricKey); }, 0);
+  }
+  function teamGrand(team){
+    return METRICS.reduce(function(sum,m){ return sum + teamTotal(team, m.key); }, 0);
+  }
+  function maxCell(metricKey){
+    var m = 0;
+    PIPELINES.forEach(function(p){ TEAMS.forEach(function(t){ m = Math.max(m, DATA[p.key][t][metricKey]); }); });
+    return m;
+  }
+  function niceCeil(n){
+    if(n<=0) return 1;
+    var exp = Math.floor(Math.log(n)/Math.LN10);
+    var base = Math.pow(10,exp);
+    var frac = n/base;
+    var nf = frac<=1?1: frac<=2?2: frac<=5?5:10;
+    return nf*base;
+  }
+  function cssVar(name){ return "var(" + name + ")"; }
+
+  // ---------------- Comparative / normalized stats ----------------
+  var ROSTER = {
+    "Уральск": 4,
+    "Костанай": 4,
+    "Актобе": 4,
+    "Команда А": 2,
+    "Команда В": 5
+  };
+
+  function companyGrand(){
+    return TEAMS.reduce(function(sum,t){ return sum + teamGrand(t); }, 0);
+  }
+  function dealsPerRep(team){ return teamGrand(team) / ROSTER[team]; }
+  function portfolioShare(team){ return teamGrand(team) / companyGrand() * 100; }
+  function overdueRate(team){ return teamGrand(team)>0 ? teamTotal(team,"overdue") / teamGrand(team) * 100 : 0; }
+  function noneRate(team){ return teamGrand(team)>0 ? teamTotal(team,"none") / teamGrand(team) * 100 : 0; }
+  function engagementRate(team){
+    if(teamGrand(team)===0) return 0;
+    return (teamTotal(team,"today")+teamTotal(team,"week")+teamTotal(team,"nextWeek")) / teamGrand(team) * 100;
+  }
+  function avgOf(fn){ return TEAMS.reduce(function(s,t){return s+fn(t);},0) / TEAMS.length; }
+
+  function ratePillColor(val, goodLow){
+    // goodLow=true: lower value is better (overdue%, none%). goodLow=false: higher is better (engagement%).
+    var good = goodLow ? val<=10 : val>=70;
+    var bad  = goodLow ? val>=25 : val<40;
+    if(bad) return {bg:cssVar("--critical-soft"), fg:cssVar("--critical")};
+    if(good) return {bg:cssVar("--good-soft"), fg:cssVar("--good")};
+    return {bg:cssVar("--warning-soft"), fg:cssVar("--warning")};
+  }
+
+  // ---------------- KPI tiles ----------------
+  var KPI_ICONS = {
+    overdue: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+    today:   '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',
+    week:    '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M7 15h4"/></svg>',
+    nextWeek:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+    later:   '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg>',
+    none:    '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 8l8 8"/></svg>'
+  };
+  var KPI_SUB = {
+    overdue: "требуют внимания срочно",
+    today: "дела на сегодняшний день",
+    week: "запланировано на неделю",
+    nextWeek: "запланировано на следующую",
+    later: "дальше следующей недели",
+    none: "нет ни одного дела"
+  };
+
+  function renderKpis(){
+    var grid = document.getElementById("kpiGrid");
+    grid.innerHTML = METRICS.map(function(m){
+      var total = grandTotal(m.key);
+      var teamVals = TEAMS.map(function(t){ return {team:t, v:teamTotal(t,m.key)}; });
+      var max = Math.max.apply(null, teamVals.map(function(v){return v.v;}).concat([1]));
+      var rows = teamVals.map(function(v){
+        var pct = (v.v/max*100).toFixed(1);
+        return '<div class="mini-row">' +
+          '<span class="mini-label">'+v.team+'</span>' +
+          '<span class="mini-track"><span class="mini-fill" style="width:'+pct+'%; background:'+cssVar(m.colorVar)+'"></span></span>' +
+          '<span class="mini-value num">'+v.v+'</span>' +
+        '</div>';
+      }).join("");
+      return '<div class="kpi-card">' +
+        '<div class="kpi-top">' +
+          '<span class="kpi-label">'+m.label+'</span>' +
+          '<span class="kpi-icon" style="background:'+cssVar(m.softVar)+'; color:'+cssVar(m.colorVar)+'">'+KPI_ICONS[m.key]+'</span>' +
+        '</div>' +
+        '<div><div class="kpi-value num">'+total+'</div><div class="kpi-sub">'+KPI_SUB[m.key]+'</div></div>' +
+        '<div class="mini-rows">'+rows+'</div>' +
+      '</div>';
+    }).join("");
+  }
+
+  // ---------------- Legend ----------------
+  function renderLegend(){
+    var el = document.getElementById("legend");
+    el.innerHTML = PIPELINES.map(function(p){
+      return '<span class="legend-item"><span class="legend-swatch" style="background:'+cssVar(p.varName)+'"></span>'+p.name+'</span>';
+    }).join("");
+  }
+
+  // ---------------- Stacked bar charts ----------------
+  function renderChart(metric){
+    var W=560, H=280, mL=38, mR=10, mT=14, mB=34;
+    var plotW = W-mL-mR, plotH = H-mT-mB;
+    var teamVals = TEAMS.map(function(t){ return teamTotal(t, metric.key); });
+    var maxTotal = Math.max.apply(null, teamVals.concat([1]));
+    var niceMax = niceCeil(maxTotal);
+    var bandW = plotW/TEAMS.length;
+    var barW = Math.min(bandW*0.52, 58);
+    var tickCount = 4;
+
+    var svg = '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+metric.label+' по командам">';
+
+    for(var i=0;i<=tickCount;i++){
+      var v = niceMax*i/tickCount;
+      var y = mT+plotH-(v/niceMax)*plotH;
+      svg += '<line x1="'+mL+'" y1="'+y+'" x2="'+(W-mR)+'" y2="'+y+'" stroke="var(--border)" stroke-width="1"/>';
+      svg += '<text x="'+(mL-6)+'" y="'+(y+3.5)+'" text-anchor="end" class="axis-label">'+Math.round(v)+'</text>';
+    }
+
+    TEAMS.forEach(function(team, ti){
+      var x = mL + ti*bandW + (bandW-barW)/2;
+      var yCursor = mT+plotH;
+      var total = 0;
+      PIPELINES.forEach(function(p){
+        var val = DATA[p.key][team][metric.key];
+        total += val;
+        if(val<=0) return;
+        var segH = (val/niceMax)*plotH;
+        var y = yCursor-segH;
+        var drawH = Math.max(segH-1.5,0);
+        svg += '<rect class="seg" data-team="'+team+'" data-pipeline="'+p.name+'" data-value="'+val+'" '+
+               'x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+barW.toFixed(1)+'" height="'+drawH.toFixed(1)+'" rx="2.5" fill="'+cssVar(p.varName)+'"></rect>';
+        if(segH>=15){
+          svg += '<text class="seg-label" x="'+(x+barW/2).toFixed(1)+'" y="'+(y+segH/2+3.4).toFixed(1)+'">'+val+'</text>';
+        }
+        yCursor = y-1.5;
+      });
+      var topY = mT+plotH-(total/niceMax)*plotH;
+      svg += '<text x="'+(x+barW/2).toFixed(1)+'" y="'+(topY-7).toFixed(1)+'" text-anchor="middle" class="bar-total">'+total+'</text>';
+      svg += '<text x="'+(x+barW/2).toFixed(1)+'" y="'+(mT+plotH+18).toFixed(1)+'" text-anchor="middle" class="axis-label">'+team+'</text>';
+    });
+
+    svg += '</svg>';
+    return svg;
+  }
+
+  function renderCharts(){
+    var grid = document.getElementById("chartsGrid");
+    grid.innerHTML = METRICS.map(function(m){
+      return '<div class="chart-card">' +
+        '<h3>'+m.label+'</h3>' +
+        '<div class="chart-note">по 5 командам, с разбивкой по пайплайнам</div>' +
+        renderChart(m) +
+      '</div>';
+    }).join("");
+
+    var tooltip = document.getElementById("tooltip");
+    grid.querySelectorAll(".seg").forEach(function(seg){
+      seg.addEventListener("mousemove", function(e){
+        tooltip.innerHTML = seg.getAttribute("data-team")+' · '+seg.getAttribute("data-pipeline")+': <b>'+seg.getAttribute("data-value")+'</b>';
+        tooltip.style.left = e.clientX+"px";
+        tooltip.style.top = (e.clientY-10)+"px";
+        tooltip.classList.add("show");
+      });
+      seg.addEventListener("mouseleave", function(){ tooltip.classList.remove("show"); });
+    });
+  }
+
+  // ---------------- Callouts ----------------
+  function renderCallouts(){
+    var el = document.getElementById("callouts");
+    var overdueByTeam = TEAMS.map(function(t){ return {team:t, v:teamTotal(t,"overdue")}; }).sort(function(a,b){return b.v-a.v;});
+    var zeroOverdueTeams = TEAMS.filter(function(t){ return teamTotal(t,"overdue")===0; });
+    var noneByTeam = TEAMS.map(function(t){ return {team:t, v:teamTotal(t,"none")}; }).sort(function(a,b){return b.v-a.v;});
+    var totalByTeam = TEAMS.map(function(t){ return {team:t, v:teamGrand(t)}; }).sort(function(a,b){return b.v-a.v;});
+    var items = [];
+
+    items.push({
+      cls:"critical",
+      icon:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 2.6 17.4a1.8 1.8 0 0 0 1.55 2.7h15.7a1.8 1.8 0 0 0 1.55-2.7L13.7 3.9a1.8 1.8 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></svg>',
+      title: overdueByTeam[0].team+" — больше всего просроченных дел",
+      text: overdueByTeam[0].team+": "+overdueByTeam[0].v+" из "+grandTotal("overdue")+" просроченных дел по всем командам. У остальных команд просрочка в разы меньше или отсутствует."
+    });
+
+    items.push({
+      cls:"good",
+      icon:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>',
+      title: zeroOverdueTeams.join(", ")+" — без просроченных дел",
+      text: "У команд "+zeroOverdueTeams.join(", ")+" нет ни одного просроченного дела ни в одном из 4 пайплайнов на дату снимка."
+    });
+
+    items.push({
+      cls:"warning",
+      icon:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 8l8 8"/></svg>',
+      title: noneByTeam[0].team+" — больше всего сделок без единого дела",
+      text: noneByTeam[0].team+": "+noneByTeam[0].v+" из "+grandTotal("none")+" сделок по компании, у которых нет ни одного запланированного дела — это риск, что по сделке просто забыли назначить следующий шаг."
+    });
+
+    items.push({
+      cls:"neutral",
+      icon:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V10M11 19V5M18 19v-7"/></svg>',
+      title: totalByTeam[0].team+" — самый крупный портфель сделок в работе",
+      text: "У "+totalByTeam[0].team+" "+totalByTeam[0].v+" сделок в работе по всем 4 пайплайнам, при этом наименьший объём — у "+totalByTeam[totalByTeam.length-1].team+": всего "+totalByTeam[totalByTeam.length-1].v+"."
+    });
+
+    el.innerHTML = items.map(function(it){
+      return '<div class="callout"><span class="icon '+it.cls+'">'+it.icon+'</span>' +
+        '<div><h4>'+it.title+'</h4><p>'+it.text+'</p></div></div>';
+    }).join("");
+  }
+
+  // ---------------- Detail table ----------------
+  function fmtCell(val, metricKey){
+    var cls = val===0 ? "zero" : "";
+    if(metricKey==="overdue" || metricKey==="none"){
+      var max = maxCell(metricKey);
+      if(val>0 && max>0){
+        var alpha = 0.12 + 0.55*(val/max);
+        var rgb = metricKey==="overdue" ? "170,58,46" : "139,147,155";
+        return '<td class="'+cls+'" style="background:rgba('+rgb+','+alpha.toFixed(2)+')">'+val+'</td>';
+      }
+    }
+    return '<td class="'+cls+'">'+val+'</td>';
+  }
+
+  function renderTable(){
+    var table = document.getElementById("dataTable");
+    var groupRow = '<tr class="group-row"><th class="row-head" rowspan="2">Команда</th>';
+    PIPELINES.forEach(function(p){ groupRow += '<th colspan="'+METRICS.length+'" style="border-top-color:'+cssVar(p.varName)+'">'+p.short+'</th>'; });
+    groupRow += '<th colspan="'+METRICS.length+'" class="group-total" style="border-top-color:var(--ink-3)">ИТОГО</th></tr>';
+
+    var subRow = '<tr class="sub-row">';
+    for(var g=0; g<PIPELINES.length+1; g++){
+      METRICS.forEach(function(m){ subRow += '<th>'+m.short+'</th>'; });
+    }
+    subRow += '</tr>';
+
+    var thead = '<thead>'+groupRow+subRow+'</thead>';
+
+    var tbody = '<tbody>';
+    TEAMS.forEach(function(team){
+      tbody += '<tr><td class="row-head">'+team+'</td>';
+      PIPELINES.forEach(function(p){
+        METRICS.forEach(function(m){
+          tbody += fmtCell(DATA[p.key][team][m.key], m.key);
+        });
+      });
+      METRICS.forEach(function(m){
+        tbody += '<td class="group-total-cell num">'+teamTotal(team, m.key)+'</td>';
+      });
+      tbody += '</tr>';
+    });
+
+    tbody += '<tr class="total-row"><td class="row-head">Итого</td>';
+    PIPELINES.forEach(function(p){
+      METRICS.forEach(function(m){
+        tbody += '<td>'+pipelineTotal(p.key, m.key)+'</td>';
+      });
+    });
+    METRICS.forEach(function(m){
+      tbody += '<td class="group-total-cell">'+grandTotal(m.key)+'</td>';
+    });
+    tbody += '</tr>';
+    tbody += '</tbody>';
+
+    table.innerHTML = thead+tbody;
+  }
+
+  // ---------------- Rank table ----------------
+  function renderRankTable(){
+    var table = document.getElementById("rankTable");
+    var rows = TEAMS.map(function(t){
+      return {
+        team: t,
+        reps: ROSTER[t],
+        total: teamGrand(t),
+        perRep: dealsPerRep(t),
+        share: portfolioShare(t),
+        overdue: overdueRate(t),
+        none: noneRate(t),
+        engagement: engagementRate(t)
+      };
+    }).sort(function(a,b){ return b.overdue-a.overdue || b.none-a.none; });
+
+    var thead = '<thead><tr>' +
+      '<th class="row-head">#</th>' +
+      '<th class="row-head">Команда</th>' +
+      '<th>Сделок</th>' +
+      '<th>Менедж.</th>' +
+      '<th>Сделок / чел</th>' +
+      '<th>Доля портфеля</th>' +
+      '<th>Просрочка</th>' +
+      '<th>Без дел</th>' +
+      '<th>Актуальность 2 нед.</th>' +
+      '</tr></thead>';
+
+    var tbody = '<tbody>' + rows.map(function(r, i){
+      var pOver = ratePillColor(r.overdue, true);
+      var pNone = ratePillColor(r.none, true);
+      var pEng  = ratePillColor(r.engagement, false);
+      return '<tr>' +
+        '<td class="rank">'+(i+1)+'</td>' +
+        '<td class="row-head">'+r.team+'</td>' +
+        '<td class="num">'+r.total+'</td>' +
+        '<td class="num">'+r.reps+'</td>' +
+        '<td class="num">'+r.perRep.toFixed(1)+'</td>' +
+        '<td class="num">'+r.share.toFixed(1)+'%</td>' +
+        '<td><span class="rate-pill num" style="background:'+pOver.bg+'; color:'+pOver.fg+'">'+r.overdue.toFixed(1)+'%</span></td>' +
+        '<td><span class="rate-pill num" style="background:'+pNone.bg+'; color:'+pNone.fg+'">'+r.none.toFixed(1)+'%</span></td>' +
+        '<td><span class="rate-pill num" style="background:'+pEng.bg+'; color:'+pEng.fg+'">'+r.engagement.toFixed(1)+'%</span></td>' +
+      '</tr>';
+    }).join("") + '</tbody>';
+
+    table.innerHTML = thead+tbody;
+  }
+
+  // ---------------- Horizontal rate-comparison charts ----------------
+  function renderHbarCard(title, note, fn, colorVar, goodLow, fmt){
+    var vals = TEAMS.map(function(t){ return {team:t, v:fn(t)}; }).sort(function(a,b){ return b.v-a.v; });
+    var max = Math.max.apply(null, vals.map(function(v){return v.v;}).concat([1]));
+    var avg = avgOf(fn);
+    var rows = vals.map(function(v){
+      var pct = Math.min(100, v.v/max*100);
+      var avgPct = Math.min(100, avg/max*100);
+      var pill = ratePillColor(v.v, goodLow);
+      return '<div class="hbar-row">' +
+        '<span class="hbar-label">'+v.team+'</span>' +
+        '<span class="hbar-track"><span class="hbar-fill" style="width:'+pct.toFixed(1)+'%; background:'+pill.fg+'"></span>' +
+          '<span class="hbar-avg-line" style="left:'+avgPct.toFixed(1)+'%" title="среднее по компании: '+fmt(avg)+'"></span>' +
+        '</span>' +
+        '<span class="hbar-value">'+fmt(v.v)+'</span>' +
+      '</div>';
+    }).join("");
+    return '<div class="chart-card">' +
+      '<h3>'+title+'</h3>' +
+      '<div class="chart-note">'+note+' · серая линия — среднее по компании ('+fmt(avg)+')</div>' +
+      rows +
+    '</div>';
+  }
+
+  function renderRateCharts(){
+    var grid = document.getElementById("rateChartsGrid");
+    grid.innerHTML =
+      renderHbarCard("Доля просроченных дел", "просрочка / все сделки в работе, %", overdueRate, "--critical", true, function(v){return v.toFixed(1)+"%";}) +
+      renderHbarCard("Доля сделок без единого дела", "без дел / все сделки в работе, %", noneRate, "--ink-3", true, function(v){return v.toFixed(1)+"%";}) +
+      renderHbarCard("Актуальность (2 недели)", "сегодня+эта+след. неделя / все сделки, %", engagementRate, "--good", false, function(v){return v.toFixed(1)+"%";}) +
+      renderHbarCard("Сделок на менеджера", "сделок в работе / число менеджеров", dealsPerRep, "--accent", false, function(v){return v.toFixed(1);});
+  }
+
+  renderKpis();
+  renderLegend();
+  renderCharts();
+  renderCallouts();
+  renderRankTable();
+  renderRateCharts();
+  renderTable();
+})();
+
+if("serviceWorker" in navigator){
+  window.addEventListener("load", function(){
+    navigator.serviceWorker.register("sw.js").catch(function(){ /* тихо игнорируем на file:// и т.п. */ });
+  });
+}
+</script>
