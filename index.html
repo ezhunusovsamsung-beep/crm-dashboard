@@ -256,6 +256,14 @@
 
 <div class="section">
   <div class="section-head">
+    <h2>Просроченные и без дел — по МОП</h2>
+    <p>Число просроченных сделок и сделок без единого дела по каждому менеджеру, срез на дату снимка.</p>
+  </div>
+  <div class="table-wrap"><table id="mopTable" style="min-width:560px"></table></div>
+</div>
+
+<div class="section">
+  <div class="section-head">
     <h2>Наблюдения</h2>
     <p>Ключевые отклонения, видимые в данных на дату снимка.</p>
   </div>
@@ -313,6 +321,35 @@
   ];
 
   var DATA = {"spec":{"Актобе":{"overdue":0,"today":36,"week":21,"nextWeek":48,"later":17,"none":4},"Уральск":{"overdue":5,"today":84,"week":57,"nextWeek":72,"later":19,"none":0},"Костанай":{"overdue":12,"today":4,"week":6,"nextWeek":5,"later":2,"none":18},"Команда А":{"overdue":1,"today":46,"week":38,"nextWeek":17,"later":9,"none":0},"Команда В":{"overdue":4,"today":39,"week":35,"nextWeek":45,"later":21,"none":2}},"repeat":{"Актобе":{"overdue":0,"today":14,"week":18,"nextWeek":32,"later":69,"none":1},"Уральск":{"overdue":2,"today":6,"week":6,"nextWeek":36,"later":23,"none":0},"Костанай":{"overdue":2,"today":0,"week":0,"nextWeek":0,"later":0,"none":6},"Команда А":{"overdue":0,"today":13,"week":17,"nextWeek":40,"later":52,"none":0},"Команда В":{"overdue":1,"today":5,"week":12,"nextWeek":27,"later":41,"none":1}},"contract":{"Актобе":{"overdue":0,"today":5,"week":4,"nextWeek":3,"later":1,"none":0},"Уральск":{"overdue":0,"today":5,"week":5,"nextWeek":9,"later":2,"none":0},"Костанай":{"overdue":1,"today":0,"week":0,"nextWeek":0,"later":0,"none":0},"Команда А":{"overdue":0,"today":11,"week":14,"nextWeek":18,"later":12,"none":0},"Команда В":{"overdue":0,"today":2,"week":2,"nextWeek":3,"later":3,"none":0}},"contractRepeat":{"Актобе":{"overdue":0,"today":0,"week":1,"nextWeek":5,"later":7,"none":0},"Уральск":{"overdue":0,"today":0,"week":1,"nextWeek":2,"later":2,"none":0},"Костанай":{"overdue":0,"today":0,"week":0,"nextWeek":0,"later":0,"none":0},"Команда А":{"overdue":0,"today":0,"week":0,"nextWeek":0,"later":3,"none":0},"Команда В":{"overdue":0,"today":4,"week":3,"nextWeek":7,"later":15,"none":0}}};
+
+  var MOP_DATA = [
+    {team:"Уральск",name:"Темирлан Мажитов",overdue:0,none:0},
+    {team:"Уральск",name:"Данияр Ихсанов",overdue:1,none:0},
+    {team:"Уральск",name:"Адель Туркульбаев",overdue:3,none:0},
+    {team:"Уральск",name:"Дияс Залмуканов",overdue:2,none:0},
+    {team:"Уральск",name:"Тимур Есенгарин",overdue:1,none:0},
+    {team:"Костанай",name:"Екатерина Алексеева",overdue:14,none:10},
+    {team:"Костанай",name:"Алихан Егинбаев",overdue:0,none:10},
+    {team:"Костанай",name:"Александр Лило",overdue:0,none:4},
+    {team:"Костанай",name:"Асхат Кенжетаев",overdue:1,none:0},
+    {team:"Актобе",name:"Евгений Дудник",overdue:0,none:0},
+    {team:"Актобе",name:"Нурсултан Молдахметов",overdue:0,none:0},
+    {team:"Актобе",name:"Дамир Кульжанов",overdue:0,none:0},
+    {team:"Актобе",name:"Алишер Болатов",overdue:0,none:0},
+    {team:"Актобе",name:"Ерлан Елюпов",overdue:0,none:0},
+    {team:"Актобе",name:"Александр Кожухарев",overdue:0,none:3},
+    {team:"Актобе",name:"Александр Левицкий",overdue:0,none:2},
+    {team:"Команда А",name:"Захар Чипура",overdue:0,none:0},
+    {team:"Команда А",name:"Илияс Таскул",overdue:0,none:0},
+    {team:"Команда А",name:"Жандос Мийзамбаев",overdue:0,none:0},
+    {team:"Команда А",name:"Дилмурат Азатов",overdue:1,none:0},
+    {team:"Команда В",name:"Роман Гладких",overdue:0,none:0},
+    {team:"Команда В",name:"Денис Деревенских",overdue:2,none:0},
+    {team:"Команда В",name:"Аян Амантай",overdue:0,none:0},
+    {team:"Команда В",name:"Денис Радченко",overdue:0,none:0},
+    {team:"Команда В",name:"Ислам Утепов",overdue:1,none:4},
+    {team:"Команда В",name:"Ертай Мамбаев",overdue:1,none:0}
+  ];
 
   var METRICS = [
     {key:"overdue",  label:"Просрочены",          short:"Просроч.", colorVar:"--critical", softVar:"--critical-soft"},
@@ -682,9 +719,32 @@
       renderHbarCard("Сделок на менеджера", "сделок в работе / число менеджеров", dealsPerRep, "--accent", false, function(v){return v.toFixed(1);});
   }
 
+  
+  function renderMopTable(){
+    var el = document.getElementById("mopTable");
+    var teamOrder = TEAMS;
+    var totals = {}; var grand = {overdue:0, none:0};
+    teamOrder.forEach(function(t){ totals[t] = {overdue:0, none:0}; });
+    MOP_DATA.forEach(function(m){ totals[m.team].overdue += m.overdue; totals[m.team].none += m.none; grand.overdue += m.overdue; grand.none += m.none; });
+    var html = '<thead><tr><th class="row-head">МОП</th><th>Просрочены</th><th>Без дел</th></tr></thead><tbody>';
+    teamOrder.forEach(function(team){
+      html += '<tr><td class="row-head" colspan="3" style="background:var(--surface-2);font-weight:700;">'+team+'</td></tr>';
+      MOP_DATA.filter(function(m){ return m.team===team; }).forEach(function(m){
+        html += '<tr><td class="row-head">'+m.name+'</td>'+
+          '<td class="'+(m.overdue===0?'zero':'')+'">'+m.overdue+'</td>'+
+          '<td class="'+(m.none===0?'zero':'')+'">'+m.none+'</td></tr>';
+      });
+      html += '<tr class="total-row"><td class="row-head">Итого '+team+'</td><td>'+totals[team].overdue+'</td><td>'+totals[team].none+'</td></tr>';
+    });
+    html += '<tr class="total-row"><td class="row-head">ИТОГО</td><td>'+grand.overdue+'</td><td>'+grand.none+'</td></tr>';
+    html += '</tbody>';
+    el.innerHTML = html;
+  }
+
   renderKpis();
   renderLegend();
   renderCharts();
+  renderMopTable();
   renderCallouts();
   renderRankTable();
   renderRateCharts();
