@@ -320,34 +320,34 @@
     {key:"contractRepeat", name:"КОНТРАКТНАЯ ТЕХНИКА (ПОВТОРНАЯ)",    short:"КОНТР.П.", varName:"--pipe-4"}
   ];
 
-  var DATA = {"spec":{"Актобе":{"overdue":0,"today":26,"week":27,"nextWeek":52,"later":18,"none":4},"Уральск":{"overdue":5,"today":38,"week":63,"nextWeek":105,"later":21,"none":0},"Костанай":{"overdue":11,"today":2,"week":6,"nextWeek":20,"later":3,"none":6},"Команда А":{"overdue":1,"today":45,"week":38,"nextWeek":17,"later":10,"none":1},"Команда В":{"overdue":0,"today":29,"week":42,"nextWeek":50,"later":23,"none":0}},"repeat":{"Актобе":{"overdue":0,"today":13,"week":18,"nextWeek":32,"later":69,"none":1},"Уральск":{"overdue":2,"today":6,"week":6,"nextWeek":36,"later":23,"none":0},"Костанай":{"overdue":1,"today":0,"week":2,"nextWeek":1,"later":3,"none":1},"Команда А":{"overdue":0,"today":13,"week":16,"nextWeek":39,"later":54,"none":0},"Команда В":{"overdue":0,"today":3,"week":13,"nextWeek":29,"later":42,"none":0}},"contract":{"Актобе":{"overdue":0,"today":4,"week":5,"nextWeek":3,"later":1,"none":0},"Уральск":{"overdue":0,"today":4,"week":5,"nextWeek":10,"later":2,"none":0},"Костанай":{"overdue":1,"today":0,"week":0,"nextWeek":0,"later":0,"none":0},"Команда А":{"overdue":0,"today":6,"week":17,"nextWeek":21,"later":12,"none":0},"Команда В":{"overdue":0,"today":1,"week":2,"nextWeek":3,"later":4,"none":0}},"contractRepeat":{"Актобе":{"overdue":0,"today":0,"week":1,"nextWeek":5,"later":7,"none":0},"Уральск":{"overdue":0,"today":0,"week":1,"nextWeek":2,"later":2,"none":0},"Костанай":{"overdue":0,"today":0,"week":0,"nextWeek":0,"later":0,"none":0},"Команда А":{"overdue":0,"today":0,"week":0,"nextWeek":0,"later":3,"none":0},"Команда В":{"overdue":0,"today":3,"week":3,"nextWeek":7,"later":16,"none":0}}};
+  var DATA = {"Уральск":{"spec":{"overdue":5,"today":10,"week":70,"nextWeek":123,"later":22,"none":0},"repeat":{"overdue":2,"today":6,"week":6,"nextWeek":36,"later":23,"none":0},"contract":{"overdue":0,"today":3,"week":5,"nextWeek":11,"later":2,"none":0},"contractRepeat":{"overdue":0,"today":0,"week":1,"nextWeek":2,"later":2,"none":0}},"Костанай":{"spec":{"overdue":11,"today":0,"week":6,"nextWeek":21,"later":3,"none":6},"repeat":{"overdue":1,"today":0,"week":2,"nextWeek":1,"later":3,"none":1},"contract":{"overdue":1,"today":0,"week":0,"nextWeek":1,"later":0,"none":0},"contractRepeat":{"overdue":0,"today":0,"week":0,"nextWeek":0,"later":0,"none":0}},"Актобе":{"spec":{"overdue":0,"today":17,"week":31,"nextWeek":55,"later":20,"none":4},"repeat":{"overdue":0,"today":11,"week":18,"nextWeek":34,"later":69,"none":1},"contract":{"overdue":0,"today":2,"week":5,"nextWeek":4,"later":1,"none":0},"contractRepeat":{"overdue":0,"today":0,"week":1,"nextWeek":5,"later":7,"none":0}},"Команда А":{"spec":{"overdue":0,"today":45,"week":38,"nextWeek":17,"later":10,"none":2},"repeat":{"overdue":0,"today":13,"week":16,"nextWeek":39,"later":54,"none":0},"contract":{"overdue":0,"today":4,"week":18,"nextWeek":23,"later":12,"none":0},"contractRepeat":{"overdue":0,"today":0,"week":0,"nextWeek":0,"later":3,"none":0}},"Команда В":{"spec":{"overdue":0,"today":23,"week":42,"nextWeek":51,"later":24,"none":0},"repeat":{"overdue":0,"today":3,"week":13,"nextWeek":29,"later":42,"none":0},"contract":{"overdue":0,"today":0,"week":3,"nextWeek":4,"later":4,"none":0},"contractRepeat":{"overdue":0,"today":3,"week":3,"nextWeek":7,"later":16,"none":0}}};
 
   var MOP_DATA = [
-    {team:"Уральск",name:"Темирлан Мажитов",overdue:0,none:0},
-    {team:"Уральск",name:"Данияр Ихсанов",overdue:1,none:0},
-    {team:"Уральск",name:"Адель Туркульбаев",overdue:3,none:0},
-    {team:"Уральск",name:"Дияс Залмуканов",overdue:2,none:0},
-    {team:"Уральск",name:"Тимур Есенгарин",overdue:1,none:0},
-    {team:"Костанай",name:"Екатерина Алексеева",overdue:12,none:7},
-    {team:"Костанай",name:"Алихан Егинбаев",overdue:0,none:0},
-    {team:"Костанай",name:"Александр Лило",overdue:0,none:0},
-    {team:"Костанай",name:"Асхат Кенжетаев",overdue:1,none:0},
-    {team:"Актобе",name:"Евгений Дудник",overdue:0,none:0},
-    {team:"Актобе",name:"Нурсултан Молдахметов",overdue:0,none:0},
-    {team:"Актобе",name:"Дамир Кульжанов",overdue:0,none:0},
-    {team:"Актобе",name:"Алишер Болатов",overdue:0,none:0},
-    {team:"Актобе",name:"Ерлан Елюпов",overdue:0,none:0},
-    {team:"Актобе",name:"Александр Кожухарев",overdue:0,none:3},
-    {team:"Актобе",name:"Александр Левицкий",overdue:0,none:2},
-    {team:"Команда А",name:"Захар Чипура",overdue:0,none:1},
-    {team:"Команда А",name:"Илияс Таскул",overdue:0,none:0},
-    {team:"Команда А",name:"Жандос Мийзамбаев",overdue:1,none:0},
-    {team:"Команда В",name:"Роман Гладких",overdue:0,none:0},
-    {team:"Команда В",name:"Денис Деревенских",overdue:0,none:0},
-    {team:"Команда В",name:"Аян Амантай",overdue:0,none:0},
-    {team:"Команда В",name:"Денис Радченко",overdue:0,none:0},
-    {team:"Команда В",name:"Ислам Утепов",overdue:0,none:0},
-    {team:"Команда В",name:"Ертай Мамбаев",overdue:0,none:0}
+  {name:"Мажитов Темирлан",team:"Уральск",overdue:0,none:0},
+  {name:"Ихсанов Данияр",team:"Уральск",overdue:1,none:0},
+  {name:"Туркульбаев Адель",team:"Уральск",overdue:3,none:0},
+  {name:"Залмуканов Дияс",team:"Уральск",overdue:2,none:0},
+  {name:"Есенгарин Тимур",team:"Уральск",overdue:1,none:0},
+  {name:"Алексеева Екатерина",team:"Костанай",overdue:12,none:7},
+  {name:"Егинбаев Алихан",team:"Костанай",overdue:0,none:0},
+  {name:"Лило Александр",team:"Костанай",overdue:0,none:0},
+  {name:"Кенжетаев Асхат",team:"Костанай",overdue:1,none:0},
+  {name:"Дудник Евгений",team:"Актобе",overdue:0,none:0},
+  {name:"Молдахметов Нурсултан",team:"Актобе",overdue:0,none:0},
+  {name:"Кульжанов Дамир",team:"Актобе",overdue:0,none:0},
+  {name:"Болатов Алишер",team:"Актобе",overdue:0,none:0},
+  {name:"Елюпов Ерлан",team:"Актобе",overdue:0,none:0},
+  {name:"Кожухарев Александр",team:"Актобе",overdue:0,none:3},
+  {name:"Левицкий Александр",team:"Актобе",overdue:0,none:2},
+  {name:"Чипура Захар",team:"Команда А",overdue:0,none:1},
+  {name:"Таскул Илияс",team:"Команда А",overdue:0,none:1},
+  {name:"Мийзамбаев Жандос",team:"Команда А",overdue:0,none:0},
+  {name:"Гладких Роман",team:"Команда В",overdue:0,none:0},
+  {name:"Деревенских Денис",team:"Команда В",overdue:0,none:0},
+  {name:"Амантай Аян",team:"Команда В",overdue:0,none:0},
+  {name:"Радченко Денис",team:"Команда В",overdue:0,none:0},
+  {name:"Утепов Ислам",team:"Команда В",overdue:0,none:0},
+  {name:"Мамбаев Ертай",team:"Команда В",overdue:0,none:0}
   ];
 
   var METRICS = [
