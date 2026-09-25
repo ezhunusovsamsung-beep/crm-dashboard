@@ -248,7 +248,7 @@
   </div>
   <div class="header-right">
     <div>Снимок на</div>
-    <div class="date">24.09.2026</div>
+    <div class="date">25.09.2026</div>
   </div>
 </div>
 
@@ -301,7 +301,7 @@
 </div>
 
 <div class="footer">
-  <div><b>Методология.</b> «Сегодня» — 24.09.2026. Для каждой сделки в статусе «в работе» (по каждому из 4 пайплайнов) берётся минимальный (ближайший) срок среди её незавершённых дел, затем сделка попадает в одну из 6 корзин — как в разделе Bitrix «Дела»: <b>Просрочены</b> (срок раньше сегодня), <b>На сегодня</b>, <b>На этой неделе</b> (пн–вс текущей недели), <b>На следующей неделе</b> (пн–вс следующей недели), <b>Позже</b> (дальше следующей недели), <b>Без дел</b> (нет ни одного незавершённого дела).</div>
+  <div><b>Методология.</b> «Сегодня» — 25.09.2026. Для каждой сделки в статусе «в работе» (по каждому из 4 пайплайнов) берётся минимальный (ближайший) срок среди её незавершённых дел, затем сделка попадает в одну из 6 корзин — как в разделе Bitrix «Дела»: <b>Просрочены</b> (срок раньше сегодня), <b>На сегодня</b>, <b>На этой неделе</b> (пн–вс текущей недели), <b>На следующей неделе</b> (пн–вс следующей недели), <b>Позже</b> (дальше следующей недели), <b>Без дел</b> (нет ни одного незавершённого дела).</div>
   <div style="margin-top:6px;">Все данные получены напрямую через REST API вебхука Bitrix24 (nkb.bitrix24.kz) — без ручной навигации по интерфейсу CRM: списки сделок по фильтрам команда+пайплайн (crm.deal.list) и список незавершённых дел по сделкам (crm.activity.list).</div>
 </div>
 
@@ -320,32 +320,32 @@
     {key:"contractRepeat", name:"КОНТРАКТНАЯ ТЕХНИКА (ПОВТОРНАЯ)",    short:"КОНТР.П.", varName:"--pipe-4"}
   ];
 
-  var DATA = {"spec":{"Актобе":{"overdue":0,"today":17,"week":31,"nextWeek":55,"later":20,"none":4},"Уральск":{"overdue":5,"today":10,"week":70,"nextWeek":123,"later":22,"none":0},"Костанай":{"overdue":11,"today":0,"week":6,"nextWeek":21,"later":3,"none":6},"Команда А":{"overdue":0,"today":45,"week":38,"nextWeek":17,"later":10,"none":2},"Команда В":{"overdue":0,"today":23,"week":42,"nextWeek":51,"later":24,"none":0}},"repeat":{"Актобе":{"overdue":0,"today":11,"week":18,"nextWeek":34,"later":69,"none":1},"Уральск":{"overdue":2,"today":6,"week":6,"nextWeek":36,"later":23,"none":0},"Костанай":{"overdue":1,"today":0,"week":2,"nextWeek":1,"later":3,"none":1},"Команда А":{"overdue":0,"today":13,"week":16,"nextWeek":39,"later":54,"none":0},"Команда В":{"overdue":0,"today":3,"week":13,"nextWeek":29,"later":42,"none":0}},"contract":{"Актобе":{"overdue":0,"today":2,"week":5,"nextWeek":4,"later":1,"none":0},"Уральск":{"overdue":0,"today":3,"week":5,"nextWeek":11,"later":2,"none":0},"Костанай":{"overdue":1,"today":0,"week":0,"nextWeek":1,"later":0,"none":0},"Команда А":{"overdue":0,"today":4,"week":18,"nextWeek":23,"later":12,"none":0},"Команда В":{"overdue":0,"today":0,"week":3,"nextWeek":4,"later":4,"none":0}},"contractRepeat":{"Актобе":{"overdue":0,"today":0,"week":1,"nextWeek":5,"later":7,"none":0},"Уральск":{"overdue":0,"today":0,"week":1,"nextWeek":2,"later":2,"none":0},"Костанай":{"overdue":0,"today":0,"week":0,"nextWeek":0,"later":0,"none":0},"Команда А":{"overdue":0,"today":0,"week":0,"nextWeek":0,"later":3,"none":0},"Команда В":{"overdue":0,"today":3,"week":3,"nextWeek":7,"later":16,"none":0}}};
+  var DATA = {"spec":{"Актобе":{"overdue":1,"today":44,"week":1,"nextWeek":55,"later":21,"none":4},"Уральск":{"overdue":9,"today":77,"week":1,"nextWeek":124,"later":22,"none":0},"Костанай":{"overdue":9,"today":8,"week":0,"nextWeek":20,"later":3,"none":6},"Команда А":{"overdue":4,"today":76,"week":0,"nextWeek":23,"later":10,"none":0},"Команда В":{"overdue":14,"today":47,"week":0,"nextWeek":54,"later":25,"none":0}},"repeat":{"Актобе":{"overdue":0,"today":29,"week":0,"nextWeek":33,"later":69,"none":1},"Уральск":{"overdue":1,"today":7,"week":0,"nextWeek":39,"later":27,"none":0},"Костанай":{"overdue":1,"today":2,"week":0,"nextWeek":1,"later":3,"none":1},"Команда А":{"overdue":12,"today":17,"week":0,"nextWeek":39,"later":54,"none":0},"Команда В":{"overdue":1,"today":14,"week":0,"nextWeek":31,"later":43,"none":1}},"contract":{"Актобе":{"overdue":0,"today":5,"week":0,"nextWeek":6,"later":1,"none":0},"Уральск":{"overdue":0,"today":6,"week":0,"nextWeek":13,"later":2,"none":0},"Костанай":{"overdue":1,"today":0,"week":0,"nextWeek":1,"later":0,"none":0},"Команда А":{"overdue":1,"today":21,"week":0,"nextWeek":24,"later":12,"none":0},"Команда В":{"overdue":0,"today":3,"week":0,"nextWeek":5,"later":4,"none":1}},"contractRepeat":{"Актобе":{"overdue":0,"today":0,"week":0,"nextWeek":6,"later":7,"none":0},"Уральск":{"overdue":0,"today":1,"week":0,"nextWeek":2,"later":2,"none":0},"Костанай":{"overdue":0,"today":0,"week":0,"nextWeek":0,"later":0,"none":0},"Команда А":{"overdue":0,"today":0,"week":0,"nextWeek":0,"later":3,"none":0},"Команда В":{"overdue":0,"today":3,"week":0,"nextWeek":8,"later":17,"none":0}}};
 
   var MOP_DATA = [
     {team:"Уральск",name:"Темирлан Мажитов",overdue:0,none:0},
     {team:"Уральск",name:"Данияр Ихсанов",overdue:1,none:0},
-    {team:"Уральск",name:"Адель Туркульбаев",overdue:3,none:0},
-    {team:"Уральск",name:"Дияс Залмуканов",overdue:2,none:0},
-    {team:"Уральск",name:"Тимур Есенгарин",overdue:1,none:0},
-    {team:"Костанай",name:"Екатерина Алексеева",overdue:12,none:7},
+    {team:"Уральск",name:"Адель Туркульбаев",overdue:2,none:0},
+    {team:"Уральск",name:"Дияс Залмуканов",overdue:7,none:0},
+    {team:"Уральск",name:"Тимур Есенгарин",overdue:0,none:0},
+    {team:"Костанай",name:"Екатерина Алексеева",overdue:10,none:7},
     {team:"Костанай",name:"Алихан Егинбаев",overdue:0,none:0},
     {team:"Костанай",name:"Александр Лило",overdue:0,none:0},
     {team:"Костанай",name:"Асхат Кенжетаев",overdue:1,none:0},
     {team:"Актобе",name:"Евгений Дудник",overdue:0,none:0},
-    {team:"Актобе",name:"Нурсултан Молдахметов",overdue:0,none:0},
+    {team:"Актобе",name:"Нурсултан Молдахметов",overdue:1,none:0},
     {team:"Актобе",name:"Дамир Кульжанов",overdue:0,none:0},
     {team:"Актобе",name:"Алишер Болатов",overdue:0,none:0},
     {team:"Актобе",name:"Ерлан Елюпов",overdue:0,none:0},
     {team:"Актобе",name:"Александр Кожухарев",overdue:0,none:3},
     {team:"Актобе",name:"Александр Левицкий",overdue:0,none:2},
-    {team:"Команда А",name:"Захар Чипура",overdue:0,none:1},
-    {team:"Команда А",name:"Илияс Таскул",overdue:0,none:1},
+    {team:"Команда А",name:"Захар Чипура",overdue:17,none:0},
+    {team:"Команда А",name:"Илияс Таскул",overdue:0,none:0},
     {team:"Команда А",name:"Жандос Мийзамбаев",overdue:0,none:0},
-    {team:"Команда В",name:"Роман Гладких",overdue:0,none:0},
-    {team:"Команда В",name:"Денис Деревенских",overdue:0,none:0},
-    {team:"Команда В",name:"Аян Амантай",overdue:0,none:0},
-    {team:"Команда В",name:"Денис Радченко",overdue:0,none:0},
+    {team:"Команда В",name:"Роман Гладких",overdue:1,none:0},
+    {team:"Команда В",name:"Денис Деревенских",overdue:8,none:1},
+    {team:"Команда В",name:"Аян Амантай",overdue:1,none:1},
+    {team:"Команда В",name:"Денис Радченко",overdue:5,none:0},
     {team:"Команда В",name:"Ислам Утепов",overdue:0,none:0},
     {team:"Команда В",name:"Ертай Мамбаев",overdue:0,none:0}
   ];
