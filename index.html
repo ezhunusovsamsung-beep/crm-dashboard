@@ -239,6 +239,7 @@
     .header{align-items:flex-start;}
     .header-right{text-align:left;}
   }
+.leads-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}.leads-tab{border:1px solid var(--border);background:var(--surface);color:var(--ink-2);border-radius:999px;padding:6px 14px;font:inherit;font-size:13px;cursor:pointer}.leads-tab.on{background:var(--accent-soft);color:var(--ink);border-color:var(--accent)}.leads-tab span{color:var(--ink-3);font-size:12px;margin-left:4px}.leads-sub{margin:16px 0 8px;font-size:13px;font-weight:600;color:var(--ink-2)}
 </style>
 
 <div class="header">
@@ -271,6 +272,18 @@
   <div class="table-wrap"><table id="limitsTable" style="min-width:680px"></table></div>
 </div>
 
+<div class="section">
+<div class="section-head">
+<h2>Входящие лиды по отделам</h2>
+<p>Лиды, созданные за период, по ответственному за лид (команда из ростера МОП; остальные — колл-центр, распределитель, биржи и т.п. — отдельной строкой). Качественный — статус «Качественный лид». Некачественный — «Не актуально (уже купили)», «Неплатежеспособный», «Не соответствует профилю работы», «Неверный номер, недоступен». Повторные лиды считаются отдельно, остальное — «в работе».</p>
+</div>
+<div class="leads-tabs" id="leadsTabs"></div>
+<div class="table-wrap"><table id="leadsTable" style="min-width:640px"></table></div>
+<div class="leads-sub">Статусы лидов за период</div>
+<div class="table-wrap"><table id="leadsStatusTable" style="min-width:420px"></table></div>
+<div class="leads-sub">Топ источников за период</div>
+<div class="table-wrap"><table id="leadsSourceTable" style="min-width:420px"></table></div>
+</div>
 <div class="section">
   <div class="section-head">
     <h2>Наблюдения</h2>
@@ -331,6 +344,7 @@
 
   var MOP_DATA = [{"team":"Уральск","name":"Темирлан Мажитов","overdue":0,"none":0},{"team":"Уральск","name":"Данияр Ихсанов","overdue":0,"none":0},{"team":"Уральск","name":"Адель Туркульбаев","overdue":0,"none":0},{"team":"Уральск","name":"Дияс Залмуканов","overdue":0,"none":0},{"team":"Уральск","name":"Тимур Маратович Есенгарин","overdue":0,"none":0},{"team":"Костанай","name":"Екатерина Алексеева","overdue":1,"none":0},{"team":"Костанай","name":"Асхат Кенжетаев","overdue":1,"none":0},{"team":"Костанай","name":"Филипп Фефелов","overdue":0,"none":1},{"team":"Актобе","name":"Евгений Дудник","overdue":0,"none":0},{"team":"Актобе","name":"Нурсултан Молдахметов","overdue":0,"none":0},{"team":"Актобе","name":"Дамир Кульжанов","overdue":0,"none":0},{"team":"Актобе","name":"Алишер Болатов","overdue":0,"none":0},{"team":"Команда А","name":"Захар Чипура","overdue":0,"none":1},{"team":"Команда А","name":"Илияс Таскул","overdue":0,"none":0},{"team":"Команда А","name":"Жандос Мийзамбаев","overdue":0,"none":0},{"team":"Команда А","name":"Анатолий Химаныч","overdue":0,"none":1},{"team":"Команда А","name":"Айтбек Салыков","overdue":0,"none":0},{"team":"Команда В","name":"Роман Гладких","overdue":0,"none":0},{"team":"Команда В","name":"Денис Деревенских","overdue":0,"none":0},{"team":"Команда В","name":"Аян Амантай","overdue":0,"none":0},{"team":"Команда В","name":"Денис Радченко","overdue":0,"none":0},{"team":"Команда В","name":"Ертай Мамбаев","overdue":0,"none":0}];
 
+  var LEADS_DATA = {"periods":[{"key":"today","label":"Сегодня","from":"30.10"},{"key":"week","label":"Неделя","from":"26.10"},{"key":"month","label":"Месяц","from":"01.10"}],"today":{"teams":{"Уральск":{"total":0,"good":0,"bad":0,"repeat":0,"work":0},"Костанай":{"total":0,"good":0,"bad":0,"repeat":0,"work":0},"Актобе":{"total":0,"good":0,"bad":0,"repeat":0,"work":0},"Команда А":{"total":0,"good":0,"bad":0,"repeat":0,"work":0},"Команда В":{"total":0,"good":0,"bad":0,"repeat":0,"work":0}},"other":{"total":2,"good":0,"bad":2,"repeat":0,"work":0},"statuses":[{"name":"НЕ СООТВЕТСТВУЕТ ПРОФИЛЮ РАБОТЫ","count":2}],"sources":[{"name":"Whatsapp - 8 700 111 22 55","total":2,"good":0}]},"week":{"teams":{"Уральск":{"total":41,"good":20,"bad":18,"repeat":0,"work":3},"Костанай":{"total":18,"good":12,"bad":5,"repeat":0,"work":1},"Актобе":{"total":26,"good":8,"bad":16,"repeat":0,"work":2},"Команда А":{"total":62,"good":14,"bad":43,"repeat":0,"work":5},"Команда В":{"total":51,"good":12,"bad":34,"repeat":0,"work":5}},"other":{"total":387,"good":6,"bad":331,"repeat":49,"work":1},"statuses":[{"name":"НЕ СООТВЕТСТВУЕТ ПРОФИЛЮ РАБОТЫ","count":256},{"name":"НЕВЕРНЫЙ НОМЕР, НЕДОСТУПЕН","count":125},{"name":"КАЧЕСТВЕННЫЙ ЛИД","count":72},{"name":"НЕПЛАТЕЖЕСПОСОБНЫЙ","count":54},{"name":"Повторный лид","count":49},{"name":"ВРЕМЕННО НЕДОСТУПЕН (1-дн)","count":17},{"name":"НЕ АКТУАЛЬНО(УЖЕ КУПИЛИ)","count":12}],"sources":[{"name":"Facebook лид","total":187,"good":17},{"name":"Мои Звонки - Android","total":131,"good":6},{"name":"Wapi 77005996900","total":91,"good":22},{"name":"Whatsapp - 8 700 111 22 55","total":77,"good":7},{"name":"Входящий звонок с +7 (700) 111 22 55","total":27,"good":2},{"name":"Whatsapp 77717375355","total":18,"good":5},{"name":"Whatsapp - 8 777 715 90 33","total":16,"good":1},{"name":"Wapi 77077913535","total":16,"good":7}]},"month":{"teams":{"Уральск":{"total":217,"good":83,"bad":131,"repeat":0,"work":3},"Костанай":{"total":75,"good":57,"bad":17,"repeat":0,"work":1},"Актобе":{"total":140,"good":45,"bad":91,"repeat":2,"work":2},"Команда А":{"total":254,"good":82,"bad":167,"repeat":0,"work":5},"Команда В":{"total":233,"good":78,"bad":147,"repeat":3,"work":5}},"other":{"total":1817,"good":42,"bad":1540,"repeat":234,"work":1},"statuses":[{"name":"НЕ СООТВЕТСТВУЕТ ПРОФИЛЮ РАБОТЫ","count":1136},{"name":"НЕВЕРНЫЙ НОМЕР, НЕДОСТУПЕН","count":630},{"name":"КАЧЕСТВЕННЫЙ ЛИД","count":387},{"name":"Повторный лид","count":239},{"name":"НЕПЛАТЕЖЕСПОСОБНЫЙ","count":239},{"name":"НЕ АКТУАЛЬНО(УЖЕ КУПИЛИ)","count":88},{"name":"ВРЕМЕННО НЕДОСТУПЕН (1-дн)","count":17}],"sources":[{"name":"Facebook лид","total":811,"good":68},{"name":"Мои Звонки - Android","total":795,"good":77},{"name":"Wapi 77005996900","total":358,"good":99},{"name":"Whatsapp - 8 700 111 22 55","total":297,"good":23},{"name":"Входящий звонок с +7 (700) 111 22 55","total":162,"good":8},{"name":"Whatsapp - 8 777 715 90 33","total":67,"good":13},{"name":"Whatsapp 77717375355","total":64,"good":20},{"name":"Wapi 77077913535","total":51,"good":32}]}};
   var LIMITS_DATA = [{"team":"Уральск","name":"Темирлан Мажитов","deals":161,"contacts":217,"companies":177},{"team":"Уральск","name":"Данияр Ихсанов","deals":123,"contacts":208,"companies":171},{"team":"Уральск","name":"Адель Туркульбаев","deals":94,"contacts":277,"companies":228},{"team":"Уральск","name":"Дияс Залмуканов","deals":55,"contacts":126,"companies":29},{"team":"Уральск","name":"Тимур Маратович Есенгарин","deals":3,"contacts":15,"companies":7},{"team":"Костанай","name":"Екатерина Алексеева","deals":63,"contacts":157,"companies":45},{"team":"Костанай","name":"Асхат Кенжетаев","deals":85,"contacts":298,"companies":2},{"team":"Костанай","name":"Филипп Фефелов","deals":26,"contacts":299,"companies":7},{"team":"Актобе","name":"Евгений Дудник","deals":101,"contacts":260,"companies":210},{"team":"Актобе","name":"Нурсултан Молдахметов","deals":111,"contacts":252,"companies":179},{"team":"Актобе","name":"Дамир Кульжанов","deals":68,"contacts":133,"companies":78},{"team":"Актобе","name":"Алишер Болатов","deals":89,"contacts":114,"companies":56},{"team":"Команда А","name":"Захар Чипура","deals":66,"contacts":252,"companies":135},{"team":"Команда А","name":"Илияс Таскул","deals":127,"contacts":304,"companies":163},{"team":"Команда А","name":"Жандос Мийзамбаев","deals":0,"contacts":5,"companies":1},{"team":"Команда А","name":"Анатолий Химаныч","deals":22,"contacts":61,"companies":26},{"team":"Команда А","name":"Айтбек Салыков","deals":94,"contacts":255,"companies":118},{"team":"Команда В","name":"Роман Гладких","deals":83,"contacts":180,"companies":82},{"team":"Команда В","name":"Денис Деревенских","deals":54,"contacts":106,"companies":114},{"team":"Команда В","name":"Аян Амантай","deals":57,"contacts":139,"companies":87},{"team":"Команда В","name":"Денис Радченко","deals":111,"contacts":136,"companies":63},{"team":"Команда В","name":"Ертай Мамбаев","deals":4,"contacts":9,"companies":4}];
   var LIMIT_CAPS = {deals:200, contacts:400, companies:300};
 
@@ -724,7 +738,29 @@
     el.innerHTML = html;
   }
 
-  function renderLimitsTable(){
+  function renderLeads(){
+var tabs=document.getElementById('leadsTabs');if(!tabs||typeof LEADS_DATA==='undefined')return;
+var cur=window.__leadsPeriod||'today';
+function pct(a,b){return b?Math.round(a/b*100)+'%':'—'}
+function cell(v){return '<td class="'+(v===0?'zero':'')+'">'+v+'</td>'}
+function row(name,o,bold){var st=bold?' style="background:var(--surface-2);font-weight:700;"':'';return '<tr'+st+'><td class="row-head"'+st+'>'+name+'</td>'+cell(o.total)+cell(o.good)+cell(o.bad)+cell(o.repeat)+cell(o.work)+'<td>'+pct(o.good,o.total)+'</td></tr>'}
+function draw(){
+tabs.innerHTML=LEADS_DATA.periods.map(function(p){return '<button type="button" class="leads-tab'+(p.key===cur?' on':'')+'" data-k="'+p.key+'">'+p.label+'<span>с '+p.from+'</span></button>'}).join('');
+Array.prototype.forEach.call(tabs.querySelectorAll('button'),function(b){b.addEventListener('click',function(){window.__leadsPeriod=cur=b.getAttribute('data-k');draw()})});
+var d=LEADS_DATA[cur];var sum={total:0,good:0,bad:0,repeat:0,work:0};
+var html='<thead><tr><th class="row-head">Отдел</th><th>Входящих</th><th>Качеств.</th><th>Некачеств.</th><th>Повторных</th><th>В работе</th><th>% качеств.</th></tr></thead><tbody>';
+TEAMS.forEach(function(t){var o=d.teams[t];if(!o)return;Object.keys(sum).forEach(function(k){sum[k]+=o[k]});html+=row(t,o,false)});
+html+=row('Итого по отделам (МОП)',sum,true);
+html+=row('Не МОП (колл-центр, распределитель и др.)',d.other,false);
+var all={};Object.keys(sum).forEach(function(k){all[k]=sum[k]+d.other[k]});
+html+=row('Всего входящих',all,true)+'</tbody>';
+document.getElementById('leadsTable').innerHTML=html;
+var tot=all.total;
+document.getElementById('leadsStatusTable').innerHTML='<thead><tr><th class="row-head">Статус</th><th>Лидов</th><th>Доля</th></tr></thead><tbody>'+(d.statuses.length?d.statuses.map(function(s){return '<tr><td class="row-head">'+s.name+'</td><td>'+s.count+'</td><td>'+pct(s.count,tot)+'</td></tr>'}).join(''):'<tr><td class="row-head" colspan="3">Нет лидов за период</td></tr>')+'</tbody>';
+document.getElementById('leadsSourceTable').innerHTML='<thead><tr><th class="row-head">Источник</th><th>Входящих</th><th>Качеств.</th><th>% качеств.</th></tr></thead><tbody>'+(d.sources.length?d.sources.map(function(s){return '<tr><td class="row-head">'+s.name+'</td><td>'+s.total+'</td><td>'+s.good+'</td><td>'+pct(s.good,s.total)+'</td></tr>'}).join(''):'<tr><td class="row-head" colspan="4">Нет лидов за период</td></tr>')+'</tbody>';
+}
+draw();}
+function renderLimitsTable(){
     var el = document.getElementById("limitsTable");
     var teamOrder = TEAMS;
     var cols = [
@@ -754,6 +790,7 @@
   renderCharts();
   renderMopTable();
   renderLimitsTable();
+  renderLeads();
   renderCallouts();
   renderRankTable();
   renderRateCharts();
